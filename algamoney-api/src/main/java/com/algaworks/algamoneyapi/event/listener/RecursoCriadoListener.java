@@ -17,7 +17,6 @@ public class RecursoCriadoListener implements ApplicationListener<RecursoCriadoE
 	public void onApplicationEvent(RecursoCriadoEvent recursoCriadoEvent) {
 		HttpServletResponse response = recursoCriadoEvent.getResponse();
 		Long codigo = recursoCriadoEvent.getCodigo();
-		
 		adicionarHeaderLocation(response, codigo);
 		
 	}
