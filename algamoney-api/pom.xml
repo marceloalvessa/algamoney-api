@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.algaworks.algamoney-api</groupId>
-	<artifactId>marcelo-api</artifactId>
+	<artifactId>algamoney-api</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>marcelo-api</name>
+	<name>algamoney-api</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -81,10 +81,10 @@
 			<version>3.4</version>
 		</dependency>
 		
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
-		</dependency> -->
+		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
