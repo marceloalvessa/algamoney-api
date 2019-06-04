@@ -46,3 +46,4 @@ INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 8);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 2);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 5);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 8);
+
