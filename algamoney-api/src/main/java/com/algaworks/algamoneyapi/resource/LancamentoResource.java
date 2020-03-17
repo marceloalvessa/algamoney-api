@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algamoneyapi.dto.LancamentoEstatisticaCategoria;
+import com.algaworks.algamoneyapi.dto.LancamentoEstatisticaDia;
 import com.algaworks.algamoneyapi.event.RecursoCriadoEvent;
 import com.algaworks.algamoneyapi.exceptionhandler.AlgamoneyExceptionHandler.Erro;
 import com.algaworks.algamoneyapi.model.Lancamento;
@@ -53,10 +54,16 @@ public class LancamentoResource {
 	@Autowired
 	private MessageSource messageSource;
 	
+	@GetMapping("/estatisticas/por-dia")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public List<LancamentoEstatisticaDia> porDia() {
+		return this.lancamentoRepository.porDia(LocalDate.of(2018, 1, 1));
+	}
+	
 	@GetMapping("/estatisticas/por-categoria")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public List<LancamentoEstatisticaCategoria> porCategoria() {
-		return this.lancamentoRepository.porCategoria(LocalDate.of(2018, 2, 18));
+		return this.lancamentoRepository.porCategoria(LocalDate.of(2018, 3, 1));
 	}
 	
 	@GetMapping
