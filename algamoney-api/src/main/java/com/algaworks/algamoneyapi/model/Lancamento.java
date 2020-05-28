@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "lancamento")
@@ -50,6 +51,7 @@ public class Lancamento {
 	private Categoria categoria;
 
 	@NotNull
+	@JsonIgnoreProperties("contatos")
 	@ManyToOne
 	@JoinColumn(name = "codigo_pessoa")
 	private Pessoa pessoa;
