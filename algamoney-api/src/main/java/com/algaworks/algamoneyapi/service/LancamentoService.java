@@ -1,3 +1,4 @@
+
 package com.algaworks.algamoneyapi.service;
 
 import java.io.InputStream;
@@ -13,10 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.algaworks.algamoneyapi.dto.LancamentoEstatisticaPessoa;
+import com.algaworks.algamoneyapi.mail.Mailer;
 import com.algaworks.algamoneyapi.model.Lancamento;
 import com.algaworks.algamoneyapi.model.Pessoa;
+import com.algaworks.algamoneyapi.model.Usuario;
 import com.algaworks.algamoneyapi.repository.LancamentoRepository;
 import com.algaworks.algamoneyapi.repository.PessoaRepository;
+import com.algaworks.algamoneyapi.repository.UsuarioRepository;
 import com.algaworks.algamoneyapi.service.exception.PessoaInexistenteOuInativaException;
 
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -27,15 +31,30 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Service
 public class LancamentoService {
 	
+	private static final String DESTINATARIOS = "ROLE_PESQUISAR_LANCAMENTO";
+	
 	@Autowired
 	private PessoaRepository pessoaRepository;
 	
 	@Autowired 
 	private LancamentoRepository lancamentoRepository;
 	
-	@Scheduled(cron = "0 26 23 * * *")
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private Mailer mailer;
+	
+	@Scheduled(cron = "0 0 6 * * *")
+//	@Scheduled(fixedDelay = 1000 * 60 * 30)
 	public void avisarSobreLancamentosVencidos() {
-		System.out.println(">>>>>>>>>>>>>>> Método sendo executado...");
+		List<Lancamento> vencidos = lancamentoRepository
+				.findByDataVencimentoLessThanEqualAndDataPagamentoIsNull(LocalDate.now());
+		
+		List<Usuario> destinatarios = usuarioRepository
+				.findByPermissoesDescricao(DESTINATARIOS);
+		
+		mailer.avisarSobreLancamentosVencidos(vencidos, destinatarios);
 	}
 	
 	public byte[] relatorioPorPessoa(LocalDate inicio, LocalDate fim) throws Exception {

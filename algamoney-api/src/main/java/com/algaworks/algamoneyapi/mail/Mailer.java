@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -19,6 +20,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.algaworks.algamoneyapi.model.Lancamento;
+import com.algaworks.algamoneyapi.model.Usuario;
 import com.algaworks.algamoneyapi.repository.LancamentoRepository;
 
 @Component
@@ -33,19 +35,35 @@ public class Mailer {
 	@Autowired
 	private LancamentoRepository repo;
 	
-	@EventListener
-	private void teste(ApplicationReadyEvent event) {
-		String template = "mail/aviso-lancamentos-vencidos";
-		
-		List<Lancamento> lista = repo.findAll();
-		
+//	@EventListener
+//	private void teste(ApplicationReadyEvent event) {
+//		String template = "mail/aviso-lancamentos-vencidos";
+//		
+//		List<Lancamento> lista = repo.findAll();
+//		
+//		Map<String, Object> variaveis = new HashMap<>();
+//		variaveis.put("lancamentos", lista);
+//		
+//		this.enviarEmail("apitestemarcelo@gmail.com", 
+//				Arrays.asList("marceloalvessa@gmail.com"), 
+//				"Testando", template, variaveis);
+//		System.out.println("Terminado o envio de e-mail...");
+//	}
+	
+	public void avisarSobreLancamentosVencidos(
+			List<Lancamento> vencidos, List<Usuario> destinatarios) {
 		Map<String, Object> variaveis = new HashMap<>();
-		variaveis.put("lancamentos", lista);
+		variaveis.put("lancamentos", vencidos);
 		
-		this.enviarEmail("apitestemarcelo.com", 
-				Arrays.asList("marceloalvessa@gmail.com"), 
-				"Testando", template, variaveis);
-		System.out.println("Terminado o envio de e-mail...");
+		List<String> emails = destinatarios.stream()
+				.map(u -> u.getEmail())
+				.collect(Collectors.toList());
+		
+		this.enviarEmail("testeapimarcelo@gmail.com", 
+				emails, 
+				"Lançamentos vencidos", 
+				"mail/aviso-lancamentos-vencidos", 
+				variaveis);
 	}
 	
 	public void enviarEmail(String remetente, 
